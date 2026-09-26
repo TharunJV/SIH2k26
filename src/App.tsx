@@ -62,9 +62,10 @@ import { GovernmentLayout } from './components/government/GovernmentLayout';
 import { ProjectWorkspace } from './components/project/ProjectWorkspace';
 import { JharkhandMap } from './components/map/JharkhandMap';
 import { PublicImpactDashboard } from './components/impact/PublicImpactDashboard';
+import { ProblemStatementDetailModal } from './components/common/ProblemStatementDetailModal';
 
 const AppContent: React.FC = () => {
-  const { currentView, currentRole, isAuthLoading } = useApp();
+  const { currentView, currentRole, isAuthLoading, problemDetailModalChallenge, closeProblemDetail } = useApp();
 
   if (isAuthLoading) {
     return (
@@ -226,6 +227,9 @@ const AppContent: React.FC = () => {
           return <PublicImpactDashboard />;
         case 'about':
           return <AboutPage />;
+        case 'challenge-detail':
+        case 'citizen-challenge-detail':
+          return <UniversityChallengesPage />;
         default:
           return currentRole === 'student' ? <StudentDashboard /> : <UniversityDashboard />;
       }
@@ -242,7 +246,7 @@ const AppContent: React.FC = () => {
         case 'submit-challenge':
           return <SubmitChallengeForm />;
         case 'challenge-detail':
-          return <CitizenChallengeDetail />;
+          return isCitizenRole ? <CitizenChallengeDetail /> : <ExploreChallengesPage />;
         case 'citizen-dashboard':
           return <CitizenDashboard />;
         case 'university-dashboard':
@@ -290,6 +294,13 @@ const AppContent: React.FC = () => {
           {currentView === 'about' && <AboutPage />}
         </main>
         <AuthModal />
+        {problemDetailModalChallenge && (
+          <ProblemStatementDetailModal
+            challenge={problemDetailModalChallenge}
+            isOpen={Boolean(problemDetailModalChallenge)}
+            onClose={closeProblemDetail}
+          />
+        )}
       </div>
     );
   }
@@ -302,6 +313,13 @@ const AppContent: React.FC = () => {
           {renderCitizenView()}
         </CitizenLayout>
         <AuthModal />
+        {problemDetailModalChallenge && (
+          <ProblemStatementDetailModal
+            challenge={problemDetailModalChallenge}
+            isOpen={Boolean(problemDetailModalChallenge)}
+            onClose={closeProblemDetail}
+          />
+        )}
       </div>
     );
   }
@@ -314,6 +332,13 @@ const AppContent: React.FC = () => {
           {renderUniversityView()}
         </UniversityLayout>
         <AuthModal />
+        {problemDetailModalChallenge && (
+          <ProblemStatementDetailModal
+            challenge={problemDetailModalChallenge}
+            isOpen={Boolean(problemDetailModalChallenge)}
+            onClose={closeProblemDetail}
+          />
+        )}
       </div>
     );
   }
@@ -324,6 +349,13 @@ const AppContent: React.FC = () => {
       <div key="industry-portal" className="h-screen w-full overflow-hidden">
         <IndustryLayout />
         <AuthModal />
+        {problemDetailModalChallenge && (
+          <ProblemStatementDetailModal
+            challenge={problemDetailModalChallenge}
+            isOpen={Boolean(problemDetailModalChallenge)}
+            onClose={closeProblemDetail}
+          />
+        )}
       </div>
     );
   }
@@ -334,6 +366,13 @@ const AppContent: React.FC = () => {
       <div key="government-portal" className="pt-portal-enter">
         <GovernmentLayout />
         <AuthModal />
+        {problemDetailModalChallenge && (
+          <ProblemStatementDetailModal
+            challenge={problemDetailModalChallenge}
+            isOpen={Boolean(problemDetailModalChallenge)}
+            onClose={closeProblemDetail}
+          />
+        )}
       </div>
     );
   }
@@ -353,6 +392,13 @@ const AppContent: React.FC = () => {
 
       {/* Global Alerts & Modals */}
       <AuthModal />
+      {problemDetailModalChallenge && (
+        <ProblemStatementDetailModal
+          challenge={problemDetailModalChallenge}
+          isOpen={Boolean(problemDetailModalChallenge)}
+          onClose={closeProblemDetail}
+        />
+      )}
     </div>
   );
 };

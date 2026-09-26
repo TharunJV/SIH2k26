@@ -120,6 +120,15 @@ export const getViewRoutePath = (viewId: string, params?: { challengeId?: string
   if ((viewId === 'challenge-detail' || viewId === 'citizen-challenge-detail') && params?.challengeId) {
     return `/tracking/${params.challengeId}`;
   }
+  if (viewId === 'university-challenges' && params?.challengeId) {
+    return `/dashboard/university/problem/${params.challengeId}`;
+  }
+  if (viewId === 'government-challenges' && params?.challengeId) {
+    return `/dashboard/government/problem/${params.challengeId}`;
+  }
+  if (viewId === 'industry-discovery' && params?.challengeId) {
+    return `/dashboard/industry/problem/${params.challengeId}`;
+  }
   if (viewId === 'university-projects' && params?.projectId) {
     return `/dashboard/university/project/${params.projectId}`;
   }
@@ -144,6 +153,30 @@ export const getViewRoutePath = (viewId: string, params?: { challengeId?: string
 export const getRouteViewInfo = (pathname: string): { view: AppView; challengeId?: string; projectId?: string } => {
   const [pathOnly] = pathname.split('?');
   const cleanPath = (pathOnly || pathname).replace(/\/$/, '') || '/';
+
+  // Handle parameterized routes: /dashboard/university/problem/:id or /dashboard/university/challenge/:id
+  const uniProblemMatch = cleanPath.match(/^\/dashboard\/university\/(?:problem|challenge)\/([^/]+)$/i);
+  if (uniProblemMatch) {
+    return { view: 'university-challenges', challengeId: decodeURIComponent(uniProblemMatch[1]) };
+  }
+
+  // Handle parameterized routes: /dashboard/government/problem/:id or /dashboard/government/challenge/:id
+  const govProblemMatch = cleanPath.match(/^\/dashboard\/government\/(?:problem|challenge)\/([^/]+)$/i);
+  if (govProblemMatch) {
+    return { view: 'government-challenges', challengeId: decodeURIComponent(govProblemMatch[1]) };
+  }
+
+  // Handle parameterized routes: /dashboard/industry/problem/:id or /dashboard/industry/challenge/:id
+  const indProblemMatch = cleanPath.match(/^\/dashboard\/industry\/(?:problem|challenge)\/([^/]+)$/i);
+  if (indProblemMatch) {
+    return { view: 'industry-discovery', challengeId: decodeURIComponent(indProblemMatch[1]) };
+  }
+
+  // Handle parameterized routes: /problem/:id
+  const problemMatch = cleanPath.match(/^\/problem\/([^/]+)$/i);
+  if (problemMatch) {
+    return { view: 'explore-challenges', challengeId: decodeURIComponent(problemMatch[1]) };
+  }
 
   // Handle parameterized routes: /challenge/:id, /tracking/:id, /track/:id, /tracking-id/:id
   const challengeMatch = cleanPath.match(/^\/(?:challenge|tracking|track|tracking-id)\/([^/]+)$/i);

@@ -2,6 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { useApp } from '../../context/AppContext';
 import { Challenge, ChallengeCategory, ChallengeUrgency } from '../../types';
 import { DownloadReportButton } from '../common/DownloadReportButton';
+import { ProblemStatementDetailModal } from '../common/ProblemStatementDetailModal';
 import {
   Sparkles,
   Search,
@@ -421,7 +422,10 @@ export const IndustryOpenProblemStatements: React.FC = () => {
 
                 {/* Title & Description */}
                 <div>
-                  <h3 className="text-base font-bold text-slate-900 group-hover:text-blue-900 transition-colors line-clamp-2">
+                  <h3
+                    onClick={() => setDetailModalChallenge(ch)}
+                    className="text-base font-bold text-slate-900 group-hover:text-blue-900 transition-colors line-clamp-2 cursor-pointer"
+                  >
                     {ch.title}
                   </h3>
                   <p className="text-xs text-slate-600 line-clamp-2 mt-1.5 leading-relaxed">
@@ -815,110 +819,26 @@ export const IndustryOpenProblemStatements: React.FC = () => {
         </div>
       )}
 
-      {/* ========================================================================= */}
-      {/* 6. MODAL: FULL GROUND EVIDENCE & PROBLEM DETAILS */}
-      {/* ========================================================================= */}
+      {/* MODAL: FULL GROUND EVIDENCE & PROBLEM DETAILS (shared component) */}
       {detailModalChallenge && (
-        <div className="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
-          <div className="bg-white rounded-3xl max-w-3xl w-full p-6 sm:p-8 max-h-[90vh] overflow-y-auto shadow-2xl border border-slate-200 space-y-6">
-            <div className="flex items-start justify-between pb-4 border-b border-slate-200">
-              <div>
-                <div className="flex items-center gap-2">
-                  <span className="font-mono text-xs font-bold text-slate-700 bg-slate-100 px-2 py-0.5 rounded">
-                    {detailModalChallenge.id}
-                  </span>
-                  <span className="text-xs font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-full flex items-center gap-1">
-                    <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-                    <span>Government Verified</span>
-                  </span>
-                </div>
-                <h2 className="text-lg font-bold text-slate-900 mt-1">
-                  {detailModalChallenge.title}
-                </h2>
-              </div>
-              <button
-                type="button"
-                onClick={() => setDetailModalChallenge(null)}
-                className="p-2 text-slate-400 hover:text-slate-700 rounded-xl hover:bg-slate-100 cursor-pointer"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            <div className="space-y-4 text-xs text-slate-700">
-              <div>
-                <h4 className="font-bold text-slate-900 uppercase tracking-wider text-[11px] mb-1">
-                  Problem Description
-                </h4>
-                <p className="p-3 rounded-xl bg-slate-50 border border-slate-200 leading-relaxed">
-                  {detailModalChallenge.description}
-                </p>
-              </div>
-
-              <div className="grid grid-cols-2 gap-3">
-                <div className="p-3 rounded-xl bg-slate-50 border border-slate-200">
-                  <span className="text-[10px] uppercase font-bold text-slate-400 block">Reported By</span>
-                  <span className="font-bold text-slate-900">{detailModalChallenge.submittedBy?.userName}</span>
-                  <span className="text-slate-500 block text-[11px]">Role: {detailModalChallenge.submittedBy?.userRole}</span>
-                </div>
-                <div className="p-3 rounded-xl bg-slate-50 border border-slate-200">
-                  <span className="text-[10px] uppercase font-bold text-slate-400 block">Location Coordinates</span>
-                  <span className="font-mono text-slate-900 font-semibold block">
-                    {detailModalChallenge.gpsCoordinates
-                      ? `${detailModalChallenge.gpsCoordinates.lat.toFixed(4)}° N, ${detailModalChallenge.gpsCoordinates.lng.toFixed(4)}° E`
-                      : 'Geotagged'}
-                  </span>
-                  <span className="text-slate-500 block text-[11px]">
-                    {detailModalChallenge.village ? `${detailModalChallenge.village}, ` : ''}{detailModalChallenge.block}, {detailModalChallenge.district}
-                  </span>
-                </div>
-              </div>
-
-              {/* Evidence Gallery */}
-              {(detailModalChallenge.evidence || []).length > 0 && (
-                <div>
-                  <h4 className="font-bold text-slate-900 uppercase tracking-wider text-[11px] mb-2 flex items-center gap-1.5">
-                    <Camera className="w-4 h-4 text-amber-600" />
-                    <span>Ground Photos & Artifacts</span>
-                  </h4>
-                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                    {detailModalChallenge.evidence.map((ev) => (
-                      <div key={ev.id} className="rounded-xl overflow-hidden border border-slate-200 bg-slate-100">
-                        {ev.type === 'image' ? (
-                          <img src={ev.url} alt={ev.caption} className="w-full h-32 object-cover" />
-                        ) : (
-                          <div className="h-32 flex items-center justify-center text-slate-400">
-                            <FileText className="w-8 h-8" />
-                          </div>
-                        )}
-                        <div className="p-2 text-[10px] text-slate-600 font-medium truncate">
-                          {ev.caption || 'Evidence'}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-
-            <div className="flex items-center justify-between pt-4 border-t border-slate-200">
-              <DownloadReportButton challenge={detailModalChallenge} size="sm" />
-
-              <button
-                type="button"
-                onClick={() => {
-                  const target = detailModalChallenge;
-                  setDetailModalChallenge(null);
-                  handleOpenUploadModal(target);
-                }}
-                className="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl shadow-xs flex items-center gap-2 cursor-pointer"
-              >
-                <UploadCloud className="w-4 h-4" />
-                <span>Accept Challenge & Upload Result</span>
-              </button>
-            </div>
-          </div>
-        </div>
+        <ProblemStatementDetailModal
+          challenge={detailModalChallenge}
+          onClose={() => setDetailModalChallenge(null)}
+          footerAction={
+            <button
+              type="button"
+              onClick={() => {
+                const target = detailModalChallenge;
+                setDetailModalChallenge(null);
+                handleOpenUploadModal(target);
+              }}
+              className="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl shadow-xs flex items-center gap-2 cursor-pointer"
+            >
+              <UploadCloud className="w-4 h-4" />
+              <span>Accept Challenge &amp; Upload Result</span>
+            </button>
+          }
+        />
       )}
     </div>
   );

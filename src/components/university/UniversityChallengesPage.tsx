@@ -3,6 +3,7 @@ import { useApp } from '../../context/AppContext';
 import { Challenge, ChallengeCategory, ChallengeUrgency } from '../../types';
 import { ChallengeEvaluationModal } from './ChallengeEvaluationModal';
 import { DownloadReportButton } from '../common/DownloadReportButton';
+import { ProblemStatementDetailModal } from '../common/ProblemStatementDetailModal';
 import {
   Sparkles,
   Search,
@@ -37,6 +38,7 @@ export const UniversityChallengesPage: React.FC = () => {
   const [selectedUrgency, setSelectedUrgency] = useState<ChallengeUrgency | 'All'>('All');
   const [statusFilter, setStatusFilter] = useState<'all' | 'matched' | 'assigned'>('all');
   const [evaluatingChallenge, setEvaluatingChallenge] = useState<Challenge | null>(null);
+  const [detailModalChallenge, setDetailModalChallenge] = useState<Challenge | null>(null);
 
   // Filter challenges
   const matchedChallenges = challenges.filter((c) => {
@@ -274,7 +276,7 @@ export const UniversityChallengesPage: React.FC = () => {
                       )}
                     </div>
                     <h3 className="text-base font-bold text-slate-900 hover:text-[#0d5c3a] cursor-pointer transition-colors"
-                      onClick={() => navigateToChallenge(ch.id)}
+                      onClick={() => setDetailModalChallenge(ch)}
                     >
                       {ch.title}
                     </h3>
@@ -375,7 +377,7 @@ export const UniversityChallengesPage: React.FC = () => {
 
                     <button
                       type="button"
-                      onClick={() => navigateToChallenge(ch.id)}
+                      onClick={() => setDetailModalChallenge(ch)}
                       className="w-full py-1.5 text-[#0d5c3a] hover:text-[#0b4d30] text-xs font-bold flex items-center justify-center gap-1 cursor-pointer transition-colors"
                     >
                       <span>View Full Evidence Dossier</span>
@@ -398,6 +400,28 @@ export const UniversityChallengesPage: React.FC = () => {
           isOpen={!!evaluatingChallenge}
           onClose={() => setEvaluatingChallenge(null)}
           onAccept={handleEvaluationAccept}
+        />
+      )}
+
+      {/* Problem Statement Detail Modal */}
+      {detailModalChallenge && (
+        <ProblemStatementDetailModal
+          challenge={detailModalChallenge}
+          onClose={() => setDetailModalChallenge(null)}
+          footerAction={
+            !detailModalChallenge.assignedUniversityId ? (
+              <button
+                type="button"
+                onClick={() => {
+                  setEvaluatingChallenge(detailModalChallenge);
+                  setDetailModalChallenge(null);
+                }}
+                className="px-4 py-2 bg-[#0d5c3a] hover:bg-[#0b4d30] text-white text-xs font-bold rounded-xl cursor-pointer transition-colors"
+              >
+                Assign Faculty Mentor
+              </button>
+            ) : undefined
+          }
         />
       )}
     </div>

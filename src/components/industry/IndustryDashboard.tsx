@@ -25,6 +25,7 @@ export const IndustryDashboard: React.FC = () => {
     setSelectedProjectId,
     setSelectedCollaborationId,
     setCurrentView,
+    openProblemDetail,
   } = useApp();
 
   const [selectedExpressProject, setSelectedExpressProject] =
@@ -339,7 +340,10 @@ export const IndustryDashboard: React.FC = () => {
                   </div>
 
                   <div className="mt-4">
-                    <h3 className="line-clamp-2 min-h-[40px] text-sm font-extrabold leading-snug text-slate-950">
+                    <h3
+                      onClick={() => openProblemDetail(challenge)}
+                      className="line-clamp-2 min-h-[40px] text-sm font-extrabold leading-snug text-slate-950 hover:text-blue-700 cursor-pointer transition-colors"
+                    >
                       {challenge.title}
                     </h3>
 
@@ -383,8 +387,8 @@ export const IndustryDashboard: React.FC = () => {
                 <div className="flex items-center justify-between gap-3 border-t border-slate-100 bg-slate-50/70 px-5 py-3.5">
                   <button
                     type="button"
-                    onClick={() => setCurrentView('industry-discovery')}
-                    className="rounded-lg px-2 py-1.5 text-[10px] font-extrabold text-slate-600 transition hover:bg-white hover:text-slate-950"
+                    onClick={() => openProblemDetail(challenge)}
+                    className="rounded-lg px-2 py-1.5 text-[10px] font-extrabold text-slate-600 transition hover:bg-white hover:text-slate-950 cursor-pointer"
                   >
                     View Details
                   </button>

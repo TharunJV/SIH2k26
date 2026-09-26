@@ -600,9 +600,5 @@ export const UniversityProfilePage: React.FC = () => {
       </div>
     </div>
   );
-<<<<<<< HEAD
-};
-=======
 };
 
->>>>>>> f0eac6ede790927527c5d5c5bad7df79646a587b

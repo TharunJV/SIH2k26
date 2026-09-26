@@ -244,7 +244,7 @@ export const CitizenLayout: React.FC<CitizenLayoutProps> = ({ children }) => {
                 <button
                   key={item.id}
                   type="button"
-                  onClick={() => setCurrentView(item.id)}
+                  onClick={() => setCurrentView(item.id as any)}
                   className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl font-medium text-xs transition-all cursor-pointer ${
                     active
                       ? 'bg-amber-50 text-amber-950 font-bold border border-amber-200/80 shadow-2xs'
@@ -355,7 +355,7 @@ export const CitizenLayout: React.FC<CitizenLayoutProps> = ({ children }) => {
                       key={item.id}
                       type="button"
                       onClick={() => {
-                        setCurrentView(item.id);
+                        setCurrentView(item.id as any);
                         setMobileMenuOpen(false);
                       }}
                       className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl font-medium text-xs transition-all cursor-pointer ${

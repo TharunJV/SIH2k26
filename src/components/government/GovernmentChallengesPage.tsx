@@ -78,6 +78,22 @@ export const GovernmentChallengesPage: React.FC = () => {
     return collaborations.filter((c) => c.challenge_id === challengeId);
   };
 
+  // Reuse same IST timestamp formatting as CitizenChallengeDetail / E-Tracking page
+  const formatFullDateTime = (dateVal?: string | Date) => {
+    if (!dateVal) return null;
+    const d = new Date(dateVal);
+    if (isNaN(d.getTime())) return String(dateVal);
+    return d.toLocaleString('en-IN', {
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: true,
+      timeZone: 'Asia/Kolkata',
+    });
+  };
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -420,8 +436,23 @@ export const GovernmentChallengesPage: React.FC = () => {
                 <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-1">
                   Public Problem Description
                 </h4>
-                <div className="p-3 bg-slate-50 rounded-xl text-xs text-slate-700 leading-relaxed">
-                  {inspectModalChallenge.description}
+                <div className="p-3 bg-slate-50 rounded-xl text-xs text-slate-700 leading-relaxed space-y-2">
+                  <p>{inspectModalChallenge.description}</p>
+                  <div className="pt-2 border-t border-slate-200 flex flex-col sm:flex-row sm:items-center gap-2 text-[11px] text-slate-500">
+                    <span className="inline-flex items-center gap-1">
+                      <span className="font-semibold text-slate-700">Posted by:</span>
+                      <span className="text-slate-800 font-medium">
+                        {inspectModalChallenge.submittedBy?.userName || 'Citizen'}
+                      </span>
+                    </span>
+                    <span className="hidden sm:inline text-slate-300">•</span>
+                    <span className="inline-flex items-center gap-1">
+                      <span className="font-semibold text-slate-700">Submitted on:</span>
+                      <span className="text-slate-800 font-medium">
+                        {formatFullDateTime(inspectModalChallenge.submittedAt) || inspectModalChallenge.submittedAt}
+                      </span>
+                    </span>
+                  </div>
                 </div>
               </div>
 

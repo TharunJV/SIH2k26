@@ -4,6 +4,7 @@ import { useToast } from '../../context/ToastContext';
 import { formatCanonicalAddress } from '../../services/geotagService';
 import { Challenge } from '../../types';
 import { DownloadReportButton } from '../common/DownloadReportButton';
+import { ProblemStatementDetailModal } from '../common/ProblemStatementDetailModal';
 import {
   CheckCircle2,
   AlertTriangle,
@@ -21,6 +22,7 @@ import {
   X,
   Clock,
   AlertCircle,
+  Eye,
 } from 'lucide-react';
 
 export const GovernmentVerificationPage: React.FC = () => {
@@ -64,6 +66,7 @@ export const GovernmentVerificationPage: React.FC = () => {
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [verifyingId, setVerifyingId] = useState<string | null>(null);
+  const [viewDetailModalChallenge, setViewDetailModalChallenge] = useState<Challenge | null>(null);
 
   // Filter queue
   const filteredQueue = challenges.filter((c) => {
@@ -319,6 +322,14 @@ export const GovernmentVerificationPage: React.FC = () => {
 
                 {/* Right actions */}
                 <div className="flex flex-wrap lg:flex-col items-center lg:items-end gap-2 shrink-0 border-t lg:border-t-0 pt-3 lg:pt-0 border-slate-100">
+                  {/* View Details button — always shown */}
+                  <button
+                    onClick={() => setViewDetailModalChallenge(ch)}
+                    className="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-xl transition-colors flex items-center gap-1.5"
+                  >
+                    <Eye className="w-3.5 h-3.5 text-slate-500" />
+                    <span>View Details</span>
+                  </button>
                   {!isVerified ? (
                     <>
                       <button
@@ -614,6 +625,28 @@ export const GovernmentVerificationPage: React.FC = () => {
             </div>
           </div>
         </div>
+      )}
+      {/* Problem Statement Detail Modal (shared) */}
+      {viewDetailModalChallenge && (
+        <ProblemStatementDetailModal
+          challenge={viewDetailModalChallenge}
+          onClose={() => setViewDetailModalChallenge(null)}
+          footerAction={
+            (viewDetailModalChallenge.trustStatus !== 'Verified' && viewDetailModalChallenge.status !== 'Validated') ? (
+              <button
+                onClick={() => {
+                  const ch = viewDetailModalChallenge;
+                  setViewDetailModalChallenge(null);
+                  handleOpenActionModal(ch, 'VERIFIED');
+                }}
+                className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl flex items-center gap-1.5 cursor-pointer"
+              >
+                <CheckCircle2 className="w-4 h-4" />
+                <span>Verify Challenge</span>
+              </button>
+            ) : undefined
+          }
+        />
       )}
     </div>
   );

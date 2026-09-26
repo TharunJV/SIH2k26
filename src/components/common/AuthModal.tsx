@@ -16,7 +16,7 @@ import {
 } from 'lucide-react';
 
 export const AuthModal: React.FC = () => {
-  const { isAuthModalOpen, setIsAuthModalOpen, switchRole, currentUser, setCurrentUser, showToast } = useApp();
+  const { isAuthModalOpen, setIsAuthModalOpen, switchRole, currentUser, setCurrentUser, showToast, setCurrentView } = useApp();
   const [activeTab, setActiveTab] = useState<'demo-login' | 'register'>('demo-login');
 
   // Register Form State
