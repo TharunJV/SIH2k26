@@ -112,7 +112,7 @@ export const CitizenLayout: React.FC<CitizenLayoutProps> = ({ children }) => {
   return (
     <div className="h-screen flex flex-col bg-slate-50 text-slate-900 font-sans antialiased overflow-hidden selection:bg-amber-500 selection:text-slate-950">
       {/* Top Header */}
-      <header className="shrink-0 z-30 w-full bg-white border-b-2 border-[#1f2937] shadow-2xs">
+      <header className="shrink-0 z-30 w-full bg-white border-b border-slate-200 shadow-2xs">
         <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           {/* Brand Left */}
           <div className="flex items-center gap-3">
@@ -244,7 +244,7 @@ export const CitizenLayout: React.FC<CitizenLayoutProps> = ({ children }) => {
                 <button
                   key={item.id}
                   type="button"
-                  onClick={() => setCurrentView(item.id)}
+                  onClick={() => setCurrentView(item.id as any)}
                   className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl font-medium text-xs transition-all cursor-pointer ${
                     active
                       ? 'bg-amber-50 text-amber-950 font-bold border border-amber-200/80 shadow-2xs'
@@ -355,7 +355,7 @@ export const CitizenLayout: React.FC<CitizenLayoutProps> = ({ children }) => {
                       key={item.id}
                       type="button"
                       onClick={() => {
-                        setCurrentView(item.id);
+                        setCurrentView(item.id as any);
                         setMobileMenuOpen(false);
                       }}
                       className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl font-medium text-xs transition-all cursor-pointer ${

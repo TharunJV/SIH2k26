@@ -214,6 +214,7 @@ export const GovernmentLayout: React.FC = () => {
 
   return (
     <div className="h-screen bg-slate-50 flex flex-col overflow-hidden">
+<<<<<<< HEAD
       {/* Official State Header */}
       <header className="shrink-0 bg-slate-900 text-white border-b border-slate-800 z-30 shadow-md">
         <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8">
@@ -341,6 +342,21 @@ export const GovernmentLayout: React.FC = () => {
                 <LogOut className="w-4 h-4" />
               </button>
             </div>
+=======
+      {/* Mobile Top Bar (hidden on desktop) */}
+      <div className="lg:hidden shrink-0 bg-white border-b border-slate-200 px-4 py-2.5 flex items-center justify-between z-30 shadow-xs">
+        <button
+          type="button"
+          onClick={() => setSidebarOpen(true)}
+          className="p-2 rounded-lg text-slate-600 hover:bg-slate-100"
+          aria-label="Open Navigation Menu"
+        >
+          <Menu className="w-5 h-5" />
+        </button>
+        <div className="flex items-center gap-2">
+          <div className="w-7 h-7 rounded-lg bg-emerald-700 flex items-center justify-center text-amber-300 shadow-xs">
+            <ShieldCheck className="w-4 h-4" />
+>>>>>>> sih2k26/main
           </div>
         </div>
       </header>
@@ -418,8 +434,13 @@ export const GovernmentLayout: React.FC = () => {
             })}
           </nav>
 
+<<<<<<< HEAD
           {/* Secondary Links */}
           <div className="pt-4 mt-auto border-t border-slate-200 space-y-1">
+=======
+          {/* Secondary Links & Actions */}
+          <div className="pt-4 mt-4 border-t border-slate-200 space-y-1">
+>>>>>>> sih2k26/main
             <button
               onClick={() => {
                 setCurrentView('government-help');

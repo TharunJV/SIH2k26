@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useApp } from '../../context/AppContext';
 import { Challenge, ExpressionOfInterest } from '../../types';
+import { ProblemStatementDetailModal } from '../common/ProblemStatementDetailModal';
 import {
   Building2,
   FileCheck,
@@ -18,6 +19,7 @@ import {
   Info,
   Check,
   X,
+  Eye,
 } from 'lucide-react';
 
 export const GovernmentAssignmentsPage: React.FC = () => {
@@ -37,6 +39,7 @@ export const GovernmentAssignmentsPage: React.FC = () => {
   const [activeChallengeId, setActiveChallengeId] = useState<string>(
     selectedChallengeId || (assignableChallenges[0]?.id || '')
   );
+  const [assignmentDetailModal, setAssignmentDetailModal] = useState<Challenge | null>(null);
 
   const activeChallenge = challenges.find((c) => c.id === activeChallengeId) || assignableChallenges[0];
 
@@ -194,6 +197,14 @@ export const GovernmentAssignmentsPage: React.FC = () => {
                   <p className="text-xs text-slate-600 mt-1 leading-relaxed">
                     {activeChallenge.description}
                   </p>
+                  <button
+                    type="button"
+                    onClick={() => setAssignmentDetailModal(activeChallenge)}
+                    className="mt-2 inline-flex items-center gap-1.5 text-xs font-semibold text-indigo-700 hover:text-indigo-900 transition-colors cursor-pointer"
+                  >
+                    <Eye className="w-3.5 h-3.5" />
+                    <span>View Full Problem Statement Details</span>
+                  </button>
                 </div>
 
                 {/* Multi-University Attempt History */}
@@ -472,6 +483,14 @@ export const GovernmentAssignmentsPage: React.FC = () => {
             </div>
           </div>
         </div>
+      )}
+
+      {/* Problem Statement Detail Modal (shared) */}
+      {assignmentDetailModal && (
+        <ProblemStatementDetailModal
+          challenge={assignmentDetailModal}
+          onClose={() => setAssignmentDetailModal(null)}
+        />
       )}
     </div>
   );

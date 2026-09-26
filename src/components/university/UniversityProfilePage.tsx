@@ -256,4 +256,9 @@ export const UniversityProfilePage: React.FC = () => {
       </div>
     </div>
   );
+<<<<<<< HEAD
 };
+=======
+};
+
+>>>>>>> sih2k26/main

@@ -26,6 +26,7 @@ export const UniversityApplicationsPage: React.FC = () => {
     setSelectedChallengeId,
     setSelectedProjectId,
     grantOfficialAssignment,
+    openProblemDetail,
   } = useApp();
 
   const [activeTab, setActiveTab] = useState<'all' | 'under_review' | 'assigned'>('all');
@@ -220,10 +221,7 @@ export const UniversityApplicationsPage: React.FC = () => {
                     </div>
 
                     <h3 className="text-base font-bold text-slate-900 hover:text-blue-600 transition-colors cursor-pointer"
-                        onClick={() => {
-                          setSelectedChallengeId(challenge.id);
-                          setCurrentView('challenge-detail');
-                        }}>
+                        onClick={() => openProblemDetail(challenge)}>
                       {challenge.title}
                     </h3>
                   </div>

@@ -12,7 +12,9 @@ import {
   MapPin,
   FileText,
   DollarSign,
+  Eye,
 } from 'lucide-react';
+import { ProblemStatementDetailModal } from '../common/ProblemStatementDetailModal';
 
 export const UniversityDashboard: React.FC = () => {
   const {
@@ -29,6 +31,8 @@ export const UniversityDashboard: React.FC = () => {
   >('incoming');
 
   const [evaluatingChallenge, setEvaluatingChallenge] =
+    useState<Challenge | null>(null);
+  const [detailModalChallenge, setDetailModalChallenge] =
     useState<Challenge | null>(null);
 
   // Existing HEI matching logic — unchanged.
@@ -236,7 +240,10 @@ export const UniversityDashboard: React.FC = () => {
                 <div className="flex flex-col gap-3 border-b border-slate-100 px-4 py-4 sm:px-5 lg:flex-row lg:items-center lg:justify-between">
                   <div className="min-w-0">
                     <div className="flex flex-wrap items-center gap-2">
-                      <h3 className="text-sm font-bold text-slate-900">
+                      <h3
+                        onClick={() => setDetailModalChallenge(ch)}
+                        className="text-sm font-bold text-slate-900 hover:text-emerald-700 cursor-pointer transition-colors"
+                      >
                         {ch.title}
                       </h3>
 
@@ -293,8 +300,8 @@ export const UniversityDashboard: React.FC = () => {
                     </button>
 
                     <button
-                      onClick={() => navigateToChallenge(ch.id)}
-                      className="inline-flex min-h-10 w-full items-center justify-center rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-xs font-semibold text-slate-700 transition hover:bg-slate-100"
+                      onClick={() => setDetailModalChallenge(ch)}
+                      className="inline-flex min-h-10 w-full items-center justify-center rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-xs font-semibold text-slate-700 transition hover:bg-slate-100 cursor-pointer"
                     >
                       View Full Dossier & Evidence →
                     </button>
@@ -451,6 +458,24 @@ export const UniversityDashboard: React.FC = () => {
           isOpen={!!evaluatingChallenge}
           onClose={() => setEvaluatingChallenge(null)}
           onAccept={handleEvaluationAccept}
+        />
+      )}
+
+      {/* Problem Statement Detail Modal */}
+      {detailModalChallenge && (
+        <ProblemStatementDetailModal
+          challenge={detailModalChallenge}
+          isOpen={Boolean(detailModalChallenge)}
+          onClose={() => setDetailModalChallenge(null)}
+          footerAction={{
+            label: 'Evaluate & Assign Faculty Mentor',
+            icon: GraduationCap,
+            onClick: () => {
+              const target = detailModalChallenge;
+              setDetailModalChallenge(null);
+              setEvaluatingChallenge(target);
+            },
+          }}
         />
       )}
     </div>

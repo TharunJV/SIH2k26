@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { useApp } from '../../context/AppContext';
 import { ProjectLifecycle, Milestone } from '../../types';
 import { GovernmentSupportAction } from '../../types/government';
@@ -43,6 +44,20 @@ export const GovernmentProjectsPage: React.FC = () => {
   const [inspectProject, setInspectProject] = useState<ProjectLifecycle | null>(
     selectedProjectId ? projects.find((p) => p.id === selectedProjectId) || null : null
   );
+
+  useEffect(() => {
+    if (selectedProjectId) {
+      const match = projects.find((p) => p.id === selectedProjectId);
+      if (match) setInspectProject(match);
+    }
+  }, [selectedProjectId, projects]);
+
+  const handleCloseInspect = () => {
+    setInspectProject(null);
+    if (selectedProjectId) {
+      setSelectedProjectId(null);
+    }
+  };
 
   // Intervention modal state
   const [showInterventionModal, setShowInterventionModal] = useState(false);
@@ -325,9 +340,9 @@ export const GovernmentProjectsPage: React.FC = () => {
       </div>
 
       {/* Project Detail / Lifecycle Modal */}
-      {inspectProject && (
-        <div className="fixed inset-0 bg-slate-950/60 z-50 flex items-center justify-center p-4 backdrop-blur-xs overflow-y-auto">
-          <div className="bg-white rounded-2xl max-w-4xl w-full p-6 max-h-[90vh] overflow-y-auto shadow-2xl border border-slate-200 space-y-6">
+      {inspectProject && typeof document !== 'undefined' && createPortal(
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 sm:p-6 bg-slate-950/60 backdrop-blur-xs overflow-y-auto">
+          <div className="bg-white rounded-2xl w-[min(1100px,95vw)] max-h-[90vh] overflow-y-auto overflow-x-hidden box-border p-6 shadow-2xl border border-slate-200 space-y-6 my-auto">
             {/* Modal Header */}
             <div className="flex items-start justify-between pb-4 border-b border-slate-200">
               <div>
@@ -347,8 +362,9 @@ export const GovernmentProjectsPage: React.FC = () => {
                 </div>
               </div>
               <button
-                onClick={() => setInspectProject(null)}
-                className="p-1 rounded-lg text-slate-400 hover:text-slate-600"
+                onClick={handleCloseInspect}
+                className="p-1 rounded-lg text-slate-400 hover:text-slate-600 cursor-pointer"
+                aria-label="Close"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -391,7 +407,7 @@ export const GovernmentProjectsPage: React.FC = () => {
                 Project Milestones & Deliverables
               </h4>
               <div className="space-y-2">
-                {inspectProject.milestones.map((m) => (
+                {(inspectProject.milestones || []).map((m) => (
                   <div
                     key={m.id}
                     className="p-3 bg-slate-50 rounded-xl border border-slate-200 flex items-center justify-between text-xs"
@@ -493,20 +509,21 @@ export const GovernmentProjectsPage: React.FC = () => {
             {/* Modal Footer */}
             <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-200">
               <button
-                onClick={() => setInspectProject(null)}
-                className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-xl"
+                onClick={handleCloseInspect}
+                className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-xl cursor-pointer"
               >
                 Close
               </button>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
       {/* Create Intervention Modal */}
-      {showInterventionModal && inspectProject && (
-        <div className="fixed inset-0 bg-slate-950/70 z-50 flex items-center justify-center p-4 backdrop-blur-xs">
-          <div className="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl border border-[#e2d6bc] space-y-4">
+      {showInterventionModal && inspectProject && typeof document !== 'undefined' && createPortal(
+        <div className="fixed inset-0 z-[10000] flex items-center justify-center p-4 sm:p-6 bg-slate-950/70 backdrop-blur-xs overflow-y-auto">
+          <div className="bg-white rounded-3xl w-[min(560px,95vw)] max-h-[90vh] overflow-y-auto overflow-x-hidden box-border p-6 shadow-2xl border border-[#e2d6bc] space-y-4 my-auto">
             <div className="flex items-start justify-between pb-3 border-b border-[#e2d6bc]/60">
               <div>
                 <span className="text-xs font-bold uppercase tracking-wider text-purple-700">
@@ -522,6 +539,7 @@ export const GovernmentProjectsPage: React.FC = () => {
               <button
                 onClick={() => setShowInterventionModal(false)}
                 className="p-1 rounded-lg text-slate-400 hover:text-slate-600 cursor-pointer"
+                aria-label="Close Intervention Modal"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -617,7 +635,8 @@ export const GovernmentProjectsPage: React.FC = () => {
               </button>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );

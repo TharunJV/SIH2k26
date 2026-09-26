@@ -68,13 +68,49 @@ import { ProjectWorkspace } from '../components/project/ProjectWorkspace';
 // Helper component to sync parameterized routes like /challenge/$challengeId or /project/$projectId
 const ChallengeDetailWrapper: React.FC = () => {
   const { challengeId } = useParams({ strict: false });
-  const { setSelectedChallengeId } = useApp();
+  const { setSelectedChallengeId, currentUser, openProblemDetail } = useApp();
 
   useEffect(() => {
     if (challengeId) {
       setSelectedChallengeId(challengeId);
+      const isCitizen =
+        currentUser.role === 'citizen' ||
+        currentUser.role === 'community_org' ||
+        currentUser.role === 'pri_ulb';
+      if (!isCitizen) {
+        openProblemDetail(challengeId);
+      }
     }
-  }, [challengeId, setSelectedChallengeId]);
+  }, [challengeId, setSelectedChallengeId, currentUser.role, openProblemDetail]);
+
+  const isCitizen =
+    currentUser.role === 'citizen' ||
+    currentUser.role === 'community_org' ||
+    currentUser.role === 'pri_ulb';
+
+  if (!isCitizen) {
+    if (
+      currentUser.role === 'university_admin' ||
+      currentUser.role === 'faculty_mentor' ||
+      currentUser.role === 'student'
+    ) {
+      return <UniversityChallengesPage />;
+    }
+    if (
+      currentUser.role === 'govt_department' ||
+      currentUser.role === 'platform_admin'
+    ) {
+      return <GovernmentDashboard />;
+    }
+    if (
+      currentUser.role === 'industry_msme' ||
+      currentUser.role === 'csr_org' ||
+      currentUser.role === 'research_institute'
+    ) {
+      return <IndustryDashboard />;
+    }
+    return <ExploreChallengesPage />;
+  }
 
   return <CitizenChallengeDetail />;
 };

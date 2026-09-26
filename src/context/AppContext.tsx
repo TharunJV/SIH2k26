@@ -257,6 +257,9 @@ interface AppContextType {
   // Quick navigation helpers
   navigateToChallenge: (id: string) => void;
   navigateToProject: (id: string) => void;
+  problemDetailModalChallenge: Challenge | null;
+  openProblemDetail: (challengeOrId: Challenge | string) => void;
+  closeProblemDetail: () => void;
   refreshData: () => Promise<void>;
   markNotificationAsRead: (id: string) => void;
   isAuthModalOpen: boolean;
@@ -378,6 +381,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   const [isAuthModalOpen, setIsAuthModalOpen] = useState<boolean>(false);
   const [isEcosystemModalOpen, setIsEcosystemModalOpen] = useState<boolean>(false);
   const [openAuthRole, setOpenAuthRole] = useState<'citizen' | 'university' | 'industry' | 'government' | null>(null);
+  const [problemDetailModalChallenge, setProblemDetailModalChallenge] = useState<Challenge | null>(null);
 
   // Restore the real Supabase Auth session on refresh and reactively listen for auth state changes
   useEffect(() => {
@@ -564,10 +568,54 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     }
   };
 
+  const openProblemDetail = (challengeOrId: Challenge | string) => {
+    if (typeof challengeOrId === 'object' && challengeOrId !== null) {
+      setSelectedChallengeId(challengeOrId.id);
+      setProblemDetailModalChallenge(challengeOrId);
+    } else if (typeof challengeOrId === 'string' && challengeOrId.trim()) {
+      const id = challengeOrId.trim();
+      setSelectedChallengeId(id);
+      const found = challenges.find(
+        (c) => c.id === id || c.trackingId === id || (c as any).dbId === id
+      );
+      if (found) {
+        setProblemDetailModalChallenge(found);
+      } else {
+        void challengeService
+          .getChallengeById(id)
+          .then((ch) => {
+            if (ch) setProblemDetailModalChallenge(ch);
+          })
+          .catch((err) => {
+            console.error('Error fetching problem statement details:', err);
+          });
+      }
+    }
+  };
+
+  const closeProblemDetail = () => {
+    setProblemDetailModalChallenge(null);
+  };
+
   const navigateToChallenge = (id: string) => {
     setSelectedChallengeId(id);
-    setCurrentView('challenge-detail', { challengeId: id });
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    // CRITICAL: Determine navigation by the CURRENT VIEWER'S ROLE, NOT the problem creator!
+    const isCitizenViewer =
+      currentUser.role === 'citizen' ||
+      currentUser.role === 'community_org' ||
+      currentUser.role === 'pri_ulb';
+
+    if (isCitizenViewer) {
+      // Citizen flow: navigate to Citizen Reported Problems / tracking page
+      setCurrentView('challenge-detail', { challengeId: id });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      // Non-citizen roles (University, Government, Industry, etc.):
+      // DO NOT navigate to Citizen Reported Problems route!
+      // Open problem details in the default modal view for that role
+      openProblemDetail(id);
+    }
   };
 
   const navigateToProject = (id: string) => {
@@ -1752,6 +1800,9 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
         prevDemoStep,
         navigateToChallenge,
         navigateToProject,
+        problemDetailModalChallenge,
+        openProblemDetail,
+        closeProblemDetail,
         refreshData,
         markNotificationAsRead,
         markNotificationRead: markNotificationAsRead,
