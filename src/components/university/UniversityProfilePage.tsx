@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { useApp } from '../../context/AppContext';
 import {
   Building2,
@@ -30,15 +30,41 @@ export const UniversityProfilePage: React.FC = () => {
   const [nodalOfficer, setNodalOfficer] = useState('Prof. (Dr.) Alok Verma, Dean R&D');
   const [contactEmail, setContactEmail] = useState('dean.rnd@bitmesra.ac.in');
   const [contactPhone, setContactPhone] = useState('+91 651 2275444');
-  const [incubationCentre, setIncubationCentre] = useState('BIT-STEP Incubation & Innovation Foundation');
+  const [incubationCentre, setIncubationCentre] = useState(
+    'BIT-STEP Incubation & Innovation Foundation'
+  );
 
   const departments = [
-    { name: 'Chemical Engineering & Water Treatment Lab', faculty: 14, capstoneProjects: 6 },
-    { name: 'Electronics, IoT & Embedded Systems', faculty: 22, capstoneProjects: 9 },
-    { name: 'Mechanical & Renewable Thermal Energy', faculty: 18, capstoneProjects: 5 },
-    { name: 'Computer Science & AI / ML Lab', faculty: 30, capstoneProjects: 12 },
-    { name: 'Bioengineering & Diagnostic Testing', faculty: 12, capstoneProjects: 4 },
-    { name: 'Civil & Geo-Informatics / Remote Sensing', faculty: 16, capstoneProjects: 5 },
+    {
+      name: 'Chemical Engineering & Water Treatment Lab',
+      faculty: 14,
+      capstoneProjects: 6,
+    },
+    {
+      name: 'Electronics, IoT & Embedded Systems',
+      faculty: 22,
+      capstoneProjects: 9,
+    },
+    {
+      name: 'Mechanical & Renewable Thermal Energy',
+      faculty: 18,
+      capstoneProjects: 5,
+    },
+    {
+      name: 'Computer Science & AI / ML Lab',
+      faculty: 30,
+      capstoneProjects: 12,
+    },
+    {
+      name: 'Bioengineering & Diagnostic Testing',
+      faculty: 12,
+      capstoneProjects: 4,
+    },
+    {
+      name: 'Civil & Geo-Informatics / Remote Sensing',
+      faculty: 16,
+      capstoneProjects: 5,
+    },
   ];
 
   const specializedLabs = [
@@ -50,7 +76,12 @@ export const UniversityProfilePage: React.FC = () => {
 
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
-    showToast('success', 'Profile Updated', 'Institutional credentials and R&D cell registry updated successfully.');
+
+    showToast(
+      'success',
+      'Profile Updated',
+      'Institutional credentials and R&D cell registry updated successfully.'
+    );
   };
 
   return (
@@ -61,16 +92,22 @@ export const UniversityProfilePage: React.FC = () => {
           <div className="w-16 h-16 rounded-2xl bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-800 text-2xl font-black shrink-0 shadow-xs">
             <GraduationCap className="w-9 h-9 text-emerald-700" />
           </div>
+
           <div>
             <div className="flex items-center gap-2 flex-wrap">
               <span className="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-xs font-bold border border-emerald-200">
                 Accredited HEI Profile
               </span>
-              <span className="text-xs text-slate-600 font-mono font-semibold">AISHE: {aisheCode}</span>
+
+              <span className="text-xs text-slate-600 font-mono font-semibold">
+                AISHE: {aisheCode}
+              </span>
             </div>
+
             <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight mt-1">
               {institutionName}
             </h1>
+
             <p className="text-xs text-slate-600 mt-1">
               Department of Higher Education &bull; Government of Jharkhand Institutional Portal
             </p>
@@ -88,7 +125,10 @@ export const UniversityProfilePage: React.FC = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Left Column: Form Info */}
         <div className="lg:col-span-2 space-y-6">
-          <form onSubmit={handleSave} className="bg-white rounded-2xl p-6 border border-[#e2d6bc] shadow-xs space-y-5">
+          <form
+            onSubmit={handleSave}
+            className="bg-white rounded-2xl p-6 border border-[#e2d6bc] shadow-xs space-y-5"
+          >
             <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2 border-b border-[#e2d6bc]/50 pb-3">
               <Building2 className="w-4 h-4 text-emerald-700" />
               <span>Institutional Details & AISHE Credentials</span>
@@ -96,7 +136,10 @@ export const UniversityProfilePage: React.FC = () => {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
               <div className="sm:col-span-2 space-y-1.5">
-                <label className="font-bold text-slate-700">Institution Official Name</label>
+                <label className="font-bold text-slate-700">
+                  Institution Official Name
+                </label>
+
                 <input
                   type="text"
                   value={institutionName}
@@ -106,7 +149,10 @@ export const UniversityProfilePage: React.FC = () => {
               </div>
 
               <div className="space-y-1.5">
-                <label className="font-bold text-slate-700">AISHE Code</label>
+                <label className="font-bold text-slate-700">
+                  AISHE Code
+                </label>
+
                 <input
                   type="text"
                   value={aisheCode}
@@ -116,7 +162,10 @@ export const UniversityProfilePage: React.FC = () => {
               </div>
 
               <div className="space-y-1.5">
-                <label className="font-bold text-slate-700">District Headquarter</label>
+                <label className="font-bold text-slate-700">
+                  District Headquarter
+                </label>
+
                 <input
                   type="text"
                   value={district}
@@ -126,7 +175,10 @@ export const UniversityProfilePage: React.FC = () => {
               </div>
 
               <div className="space-y-1.5">
-                <label className="font-bold text-slate-700">NAAC Accreditation Grade</label>
+                <label className="font-bold text-slate-700">
+                  NAAC Accreditation Grade
+                </label>
+
                 <input
                   type="text"
                   value={accreditation}
@@ -136,7 +188,10 @@ export const UniversityProfilePage: React.FC = () => {
               </div>
 
               <div className="space-y-1.5">
-                <label className="font-bold text-slate-700">NIRF Ranking Band</label>
+                <label className="font-bold text-slate-700">
+                  NIRF Ranking Band
+                </label>
+
                 <input
                   type="text"
                   value={nirfRank}
@@ -146,7 +201,10 @@ export const UniversityProfilePage: React.FC = () => {
               </div>
 
               <div className="sm:col-span-2 space-y-1.5">
-                <label className="font-bold text-slate-700">Incubation & Innovation Centre</label>
+                <label className="font-bold text-slate-700">
+                  Incubation & Innovation Centre
+                </label>
+
                 <input
                   type="text"
                   value={incubationCentre}
@@ -163,7 +221,10 @@ export const UniversityProfilePage: React.FC = () => {
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
               <div className="sm:col-span-3 space-y-1.5">
-                <label className="font-bold text-slate-700">Nodal Officer & Designation</label>
+                <label className="font-bold text-slate-700">
+                  Nodal Officer & Designation
+                </label>
+
                 <input
                   type="text"
                   value={nodalOfficer}
@@ -173,7 +234,10 @@ export const UniversityProfilePage: React.FC = () => {
               </div>
 
               <div className="sm:col-span-2 space-y-1.5">
-                <label className="font-bold text-slate-700">Official R&D Email</label>
+                <label className="font-bold text-slate-700">
+                  Official R&D Email
+                </label>
+
                 <input
                   type="email"
                   value={contactEmail}
@@ -183,7 +247,10 @@ export const UniversityProfilePage: React.FC = () => {
               </div>
 
               <div className="space-y-1.5">
-                <label className="font-bold text-slate-700">Direct Contact Phone</label>
+                <label className="font-bold text-slate-700">
+                  Direct Contact Phone
+                </label>
+
                 <input
                   type="tel"
                   value={contactPhone}
@@ -208,16 +275,27 @@ export const UniversityProfilePage: React.FC = () => {
           <div className="bg-white rounded-2xl p-6 border border-[#e2d6bc] shadow-xs space-y-4">
             <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
               <Layers className="w-4 h-4 text-emerald-700" />
-              <span>Registered Academic Departments ({departments.length})</span>
+              <span>
+                Registered Academic Departments ({departments.length})
+              </span>
             </h3>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {departments.map((dept, idx) => (
-                <div key={idx} className="p-3 bg-[#fbf8ee] rounded-xl border border-[#e2d6bc] space-y-1">
-                  <span className="text-xs font-bold text-slate-900 block">{dept.name}</span>
+                <div
+                  key={idx}
+                  className="p-3 bg-[#fbf8ee] rounded-xl border border-[#e2d6bc] space-y-1"
+                >
+                  <span className="text-xs font-bold text-slate-900 block">
+                    {dept.name}
+                  </span>
+
                   <div className="flex justify-between text-[11px] text-slate-600 pt-1">
                     <span>{dept.faculty} Faculty Researchers</span>
-                    <strong className="text-emerald-800">{dept.capstoneProjects} Active Projects</strong>
+
+                    <strong className="text-emerald-800">
+                      {dept.capstoneProjects} Active Projects
+                    </strong>
                   </div>
                 </div>
               ))}
@@ -235,8 +313,12 @@ export const UniversityProfilePage: React.FC = () => {
 
             <div className="space-y-2.5">
               {specializedLabs.map((lab, idx) => (
-                <div key={idx} className="p-3 rounded-xl bg-emerald-50/50 border border-emerald-100 text-xs text-slate-800 flex items-start gap-2.5">
+                <div
+                  key={idx}
+                  className="p-3 rounded-xl bg-emerald-50/50 border border-emerald-100 text-xs text-slate-800 flex items-start gap-2.5"
+                >
                   <Sparkles className="w-4 h-4 text-emerald-700 shrink-0 mt-0.5" />
+
                   <span className="leading-snug">{lab}</span>
                 </div>
               ))}
@@ -248,17 +330,15 @@ export const UniversityProfilePage: React.FC = () => {
               <Award className="w-4 h-4 text-amber-500" />
               <span>State Innovation Seed Fund Status</span>
             </div>
+
             <p className="text-xs text-slate-700 leading-relaxed">
-              BIT Mesra is recognized as a Tier-1 Nodal Hub under Jharkhand State Higher Education Council (JSHEC). Eligible for 100% matching R&D grants up to ₹25 Lakhs per capstone cohort.
+              BIT Mesra is recognized as a Tier-1 Nodal Hub under Jharkhand State
+              Higher Education Council (JSHEC). Eligible for 100% matching R&D
+              grants up to ₹25 Lakhs per capstone cohort.
             </p>
           </div>
         </div>
       </div>
     </div>
   );
-<<<<<<< HEAD
 };
-=======
-};
-
->>>>>>> sih2k26/main
